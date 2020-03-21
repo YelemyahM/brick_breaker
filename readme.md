@@ -1,1 +1,1 @@
-# Brick breaker game
+# Breakout game
