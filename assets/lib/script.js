@@ -18,6 +18,7 @@ var brickHeight = 20;
 var brickPadding = 10;
 var brickOffsetTop = 30;
 var brickOffsetLeft = 30;
+var score = 0;
 var gameOverNotify = document.querySelector('.game-over-notify');
 var interval;
 
@@ -54,6 +55,7 @@ function keyUpHandler(e) {
   }
 }
 
+/* The collision detection */
 function collisonDetection(){
   for(var c = 0; c < brickColumnCount; c++){
     for(var r = 0; r < brickRowCount; r++){
@@ -61,9 +63,22 @@ function collisonDetection(){
       if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
         dy = -dy;
         b.status = 0;
+        score++;
+        if (score == brickRowCount * brickColumnCount) {
+          alert("YOU WIN, CONGRATULATIONS!");
+          document.location.reload();
+          clearInterval(interval);
+        }
       }
     }
   }
+}
+
+/* Score displaying */
+function drawScore() {
+  ctx.font = "16px Arial";
+  ctx.fillStyle = "#0095DD";
+  ctx.fillText("Score: " + score, 8, 20);
 }
 
 /* The ball */
@@ -109,6 +124,7 @@ function ballMouvment() {
   drawBricks();
   drawBall();
   drawPaddle();
+  drawScore();
   collisonDetection();
 
   // Bounce on vertical walls
@@ -142,4 +158,4 @@ function ballMouvment() {
   y += dy;
 }
 
-interval = setInterval(ballMouvment, 20);
+interval = setInterval(ballMouvment, 10);
