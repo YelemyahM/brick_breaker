@@ -18,6 +18,8 @@ var brickHeight = 20;
 var brickPadding = 10;
 var brickOffsetTop = 30;
 var brickOffsetLeft = 30;
+var gameOverNotify = document.querySelector('.game-over-notify');
+var interval;
 
 /* Two dimensionnal array for bricks */
 var bricks = [];
@@ -30,6 +32,9 @@ for (var c = 0; c < brickColumnCount; c++) {
 
 document.addEventListener("keydown", KeyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
+gameOverNotify.addEventListener("click", function () {
+  document.location.reload();
+});
 
 /* Key press Down */
 function KeyDownHandler(e) {
@@ -118,8 +123,9 @@ function ballMouvment() {
       dy = -dy;
     }
     else {
-      alert("GAME OVER");
-      document.location.reload();
+      gameOverNotify.style.display = 'flex';
+      clearInterval(interval);
+      return;
     }
   }
 
@@ -136,4 +142,4 @@ function ballMouvment() {
   y += dy;
 }
 
-setInterval(ballMouvment, 20);
+interval = setInterval(ballMouvment, 20);
