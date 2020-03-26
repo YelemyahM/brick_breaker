@@ -20,6 +20,7 @@ var brickOffsetTop = 30;
 var brickOffsetLeft = 30;
 var score = 0;
 var gameOverNotify = document.querySelector('.game-over-notify');
+var winNotify = document.querySelector('.win-notify');
 var interval;
 
 /* Two dimensionnal array for bricks */
@@ -35,6 +36,9 @@ document.addEventListener("keydown", KeyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 document.addEventListener("mousemove", mouseMouveHandler, false);
 gameOverNotify.addEventListener("click", function () {
+  document.location.reload();
+});
+winNotify.addEventListener("clikc", function(){
   document.location.reload();
 });
 
@@ -68,14 +72,16 @@ function collisonDetection() {
   for (var c = 0; c < brickColumnCount; c++) {
     for (var r = 0; r < brickRowCount; r++) {
       var b = bricks[c][r];
-      if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
-        dy = -dy;
-        b.status = 0;
-        score++;
-        if (score == brickRowCount * brickColumnCount) {
-          alert("YOU WIN, CONGRATULATIONS!");
-          document.location.reload();
-          clearInterval(interval);
+      if (b.status == 1) {
+        if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
+          dy = -dy;
+          b.status = 0;
+          score++;
+          if (score == brickRowCount * brickColumnCount) {
+            winNotify.style.display = 'flex';
+            clearInterval(interval);
+            return;
+          }
         }
       }
     }
