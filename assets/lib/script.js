@@ -33,6 +33,7 @@ for (var c = 0; c < brickColumnCount; c++) {
 
 document.addEventListener("keydown", KeyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
+document.addEventListener("mousemove", mouseMouveHandler, false);
 gameOverNotify.addEventListener("click", function () {
   document.location.reload();
 });
@@ -55,10 +56,17 @@ function keyUpHandler(e) {
   }
 }
 
+function mouseMouveHandler(e) {
+  var relativeX = e.clientX - canvas.offsetLeft;
+  if (relativeX > 0 && relativeX < canvas.width) {
+    paddleX = relativeX - paddleWidth / 2;
+  }
+}
+
 /* The collision detection */
-function collisonDetection(){
-  for(var c = 0; c < brickColumnCount; c++){
-    for(var r = 0; r < brickRowCount; r++){
+function collisonDetection() {
+  for (var c = 0; c < brickColumnCount; c++) {
+    for (var r = 0; r < brickRowCount; r++) {
       var b = bricks[c][r];
       if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
         dy = -dy;
