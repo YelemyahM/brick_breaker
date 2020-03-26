@@ -22,6 +22,7 @@ var score = 0;
 var gameOverNotify = document.querySelector('.game-over-notify');
 var winNotify = document.querySelector('.win-notify');
 var interval;
+var lives = 3;
 
 /* Two dimensionnal array for bricks */
 var bricks = [];
@@ -38,7 +39,7 @@ document.addEventListener("mousemove", mouseMouveHandler, false);
 gameOverNotify.addEventListener("click", function () {
   document.location.reload();
 });
-winNotify.addEventListener("clikc", function(){
+winNotify.addEventListener("clikc", function () {
   document.location.reload();
 });
 
@@ -79,7 +80,6 @@ function collisonDetection() {
           score++;
           if (score == brickRowCount * brickColumnCount) {
             winNotify.style.display = 'flex';
-            clearInterval(interval);
             return;
           }
         }
@@ -93,6 +93,12 @@ function drawScore() {
   ctx.font = "16px Arial";
   ctx.fillStyle = "#0095DD";
   ctx.fillText("Score: " + score, 8, 20);
+}
+
+function drawLives() {
+  ctx.font = "16px Arial";
+  ctx.fillStyle = "#0095DD";
+  ctx.fillText("Lives: " + lives, canvas.width - 65, 20);
 }
 
 /* The ball */
@@ -139,6 +145,7 @@ function ballMouvment() {
   drawBall();
   drawPaddle();
   drawScore();
+  drawLives();
   collisonDetection();
 
   // Bounce on vertical walls
@@ -153,9 +160,17 @@ function ballMouvment() {
       dy = -dy;
     }
     else {
-      gameOverNotify.style.display = 'flex';
-      clearInterval(interval);
-      return;
+      --lives;
+      if (!lives) {
+        gameOverNotify.style.display = 'flex';
+        return;
+      } else {
+        x = canvas.width / 2;
+        y = canvas.height - 10;
+        dx = 2;
+        dy = -2;
+        paddleX = (canvas.width - paddleWidth) / 2;
+      }
     }
   }
 
@@ -170,6 +185,7 @@ function ballMouvment() {
 
   x += dx;
   y += dy;
+  requestAnimationFrame(ballMouvment);
 }
 
-interval = setInterval(ballMouvment, 10);
+ballMouvment();
